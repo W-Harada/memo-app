@@ -15,7 +15,7 @@ async function store(){
     if (text.length === 0) return;
     try{const response = await axios.post('http://localhost:48080/api/memos', { text });
         console.log('success', response.data);}
-        catch(error){console.error('error',error);}
+    catch(error){console.error('error',error);}
     memo.value=""
 }
 </script>
