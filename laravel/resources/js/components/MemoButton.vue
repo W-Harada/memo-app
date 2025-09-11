@@ -10,8 +10,8 @@ const isDisabled = computed(() => props.memo.trim().length === 0)
     <button type="button"
             @click="emit('save')"
             :disabled="isDisabled"
-            :class="['text-white flex justify-center items-center gap-2 w-11/12 h-14 border-solid rounded-md p-4 ml-6',props.memo.trim().length > 0?'bg-orange-500':'bg-orange-300']">
-        <Image/>
+            :class="['flex justify-center items-center gap-2 w-11/12 h-14 border-solid rounded-md p-4 ml-6 text-white',props.memo.trim().length > 0?'bg-orange-500':'bg-orange-300']">
+        <Image class="text-white"/>
         メモを保存
     </button>
 </template>
