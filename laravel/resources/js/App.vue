@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
 import Plus from "@/components/svgs/PlusSvg.vue";
+import Image from "@/components/svgs/DocumentSvg.vue";
 import Textarea from "@/components/TextareaForm.vue";
 import MemoButton from "@/components/MemoButton.vue";
+import MemoCard from "@/components/MemoCard.vue";
 
 import { ref } from "vue";
 import axios from "axios";
@@ -20,11 +22,11 @@ async function store(){
 }
 </script>
 <template>
-    <div class="bg-orange-100 h-screen">
+    <div class="bg-orange-100 min-h-screen">
         <Header/>
         <div class="flex content-center justify-center">
-            <div class="w-2/5 h-80 border-solid rounded-md bg-white border-2 border-orange-200 m-6 p-4 shadow-md">
-                <div class="flex gap-4">
+            <div class="w-2/5 border-solid rounded-md bg-white border-2 border-orange-200 m-6 p-4 shadow-md">
+                <div class="flex gap-2">
                     <Plus class="pt-1 w-6 h-6 ml-4"/>
                     <h2 class="text-black font-semibold text-lg">新しいメモ</h2>
                 </div>
@@ -32,6 +34,9 @@ async function store(){
                 <MemoButton :memo="memo"
                             @save="store"/>
             </div>
+        </div>
+        <div class="flex flex-col items-center w-full">
+            <MemoCard/>
         </div>
     </div>
 </template>
