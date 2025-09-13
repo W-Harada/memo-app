@@ -1,12 +1,34 @@
 <script setup lang="ts">
 import Image from "@/components/svgs/DocumentSvg.vue";
 
-const memos = [
-    { id: 1, text: "aaa",date: "2025/8/19 18:38:29" },
-    { id: 2, text: "Vue.jsの基本構文を復習する",date: "2024-07-30 10:30" },
-    { id: 3, text: "Laravelのルーティングについて調べる",date: "2024-07-30 9:15" },
-    { id: 4, text: "明日のプレゼン資料を準備する",date: "2024-07-29 16:45 "}
-];
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
+const memos = ref<{id: number, text: string, created_at: string}[]>([]);
+
+async function fetchMemo (){
+    try {
+        const res = await axios.get("http://localhost:48080/api/memos");
+        memos.value = res.data.sort((a: {id: number}, b: {id: number}) => b.id - a.id);
+    } catch (error) {
+        console.error('error', error);
+    }
+}
+
+onMounted(fetchMemo);
+
+defineExpose({fetchMemo});
+
+function formatDate(datetime: string): string {
+    const date = new Date(datetime);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    const hh = String(date.getHours()).padStart(2, '0');
+    const mm = String(date.getMinutes()).padStart(2, '0');
+    return `${y}/${m}/${d} ${hh}:${mm}`;
+}
+
 </script>
 
 <template>
@@ -22,9 +44,9 @@ const memos = [
         </div>
     </div>
     <div v-for="memo in memos" :key="memo.id"
-         class="w-2/5 h-20 border-solid rounded-md bg-white border-2 border-orange-200 m-2 p-4 shadow-md">
-        <div>{{ memo.text }}</div>
-        <div>{{ memo.date }}</div>
+         class="w-2/5 border-solid rounded-md bg-white border-2 border-orange-200 m-2 p-4 shadow-md">
+        <div class="text-lg font-medium">{{ memo.text }}</div>
+        <div class="text-gray-500 text-sm">{{ formatDate(memo.created_at) }}</div>
     </div>
 </template>
 

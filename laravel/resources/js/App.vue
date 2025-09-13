@@ -1,25 +1,30 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
 import Plus from "@/components/svgs/PlusSvg.vue";
-import Image from "@/components/svgs/DocumentSvg.vue";
 import Textarea from "@/components/TextareaForm.vue";
 import MemoButton from "@/components/MemoButton.vue";
 import MemoCard from "@/components/MemoCard.vue";
 
-import { ref } from "vue";
+import {ref} from "vue";
 import axios from "axios";
 
 const memo = ref("");
+const memoCardRef = ref();
 
-async function store(){
+async function store() {
     const text = memo.value.trim();
     console.log(text)
     if (text.length === 0) return;
-    try{const response = await axios.post('http://localhost:48080/api/memos', { text });
-        console.log('success', response.data);}
-    catch(error){console.error('error',error);}
-    memo.value=""
+    try {
+        const response = await axios.post('http://localhost:48080/api/memos', {text});
+        console.log('success', response.data);
+        memoCardRef.value.fetchMemo();
+        memo.value="";
+    } catch (error) {
+        console.error('error', error);
+    }
 }
+
 </script>
 <template>
     <div class="bg-orange-100 min-h-screen">
@@ -36,7 +41,7 @@ async function store(){
             </div>
         </div>
         <div class="flex flex-col items-center w-full">
-            <MemoCard/>
+            <MemoCard ref="memoCardRef"/>
         </div>
     </div>
 </template>
