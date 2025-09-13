@@ -10,11 +10,13 @@ import axios from "axios";
 
 const memo = ref("");
 const memoCardRef = ref();
+const isSaving = ref(false);
 
 async function store() {
     const text = memo.value.trim();
     console.log(text)
-    if (text.length === 0) return;
+    if (!text || isSaving.value) return;
+    isSaving.value = true;
     try {
         const response = await axios.post('http://localhost:48080/api/memos', {text});
         console.log('success', response.data);
@@ -22,6 +24,8 @@ async function store() {
         memo.value="";
     } catch (error) {
         console.error('error', error);
+    }finally {
+        isSaving.value = false;
     }
 }
 
@@ -35,7 +39,10 @@ async function store() {
                     <Plus class="pt-1 w-6 h-6 ml-4"/>
                     <h2 class="text-black font-semibold text-lg">新しいメモ</h2>
                 </div>
-                <Textarea v-model="memo"/>
+                <Textarea v-model="memo"
+                          :disabled="isSaving"
+                          @keyup.enter.exact.prevent="store"
+                          @keyup.shift.enter="memo += '\n'"/>
                 <MemoButton :memo="memo"
                             @save="store"/>
             </div>
