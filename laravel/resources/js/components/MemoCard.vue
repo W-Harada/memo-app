@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Image from "@/components/svgs/DocumentSvg.vue";
+import Trash from "@/components/svgs/TrashSvg.vue";
 
 import { ref, onMounted } from "vue";
 import axios from "axios";
@@ -12,6 +13,15 @@ async function fetchMemo (){
         memos.value = res.data.sort((a: {id: number}, b: {id: number}) => b.id - a.id);
     } catch (error) {
         console.error('error', error);
+    }
+}
+
+async function deleteMemo (id: number) {
+    try {
+        const response = await axios.delete(`http://localhost:48080/api/memos/${id}`);
+        memos.value = memos.value.filter(memo => memo.id !== id);
+    } catch (error) {
+        console.error("error", error);
     }
 }
 
@@ -45,7 +55,13 @@ function formatDate(datetime: string): string {
     </div>
     <div v-for="memo in memos" :key="memo.id"
          class="w-2/5 border-solid rounded-md bg-white border-2 border-orange-200 m-2 p-4 shadow-md">
-        <div class="text-lg font-medium">{{ memo.text }}</div>
+        <div class="flex justify-between">
+            <div class="text-lg font-medium mb-2">{{ memo.text }}</div>
+            <button class="w-8 h-8 mt-1 rounded-md text-gray-500 transition hover:text-red-400 hover:bg-red-100"
+                    @click="deleteMemo(memo.id)">
+                <Trash class="ml-2"/>
+            </button>
+        </div>
         <div class="text-gray-500 text-sm">{{ formatDate(memo.created_at) }}</div>
     </div>
 </template>
