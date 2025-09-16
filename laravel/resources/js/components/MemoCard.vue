@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Image from "@/components/svgs/DocumentSvg.vue";
+import Document from "@/components/svgs/DocumentSvg.vue";
 import Trash from "@/components/svgs/TrashSvg.vue";
 
 import { ref, onMounted } from "vue";
@@ -18,7 +18,7 @@ async function fetchMemo (){
 
 async function deleteMemo (id: number) {
     try {
-        const response = await axios.delete(`http://localhost:48080/api/memos/${id}`);
+        await axios.delete(`http://localhost:48080/api/memos/${id}`);
         memos.value = memos.value.filter(memo => memo.id !== id);
     } catch (error) {
         console.error("error", error);
@@ -44,9 +44,9 @@ function formatDate(datetime: string): string {
 <template>
     <div class="w-2/5 h-10">
         <div class="flex justify-between">
-            <div class="flex gap-2">
-                <Image class="w-6 h-6 mt-1"/>
-                <h2 class="text-black font-semibold text-lg">保存されたメモ</h2>
+            <div class="flex items-center gap-2">
+                <Document class="w-6 h-6"/>
+                <p class="text-black font-semibold text-lg">保存されたメモ</p>
             </div>
             <div class="w-12 h-7 bg-orange-200 rounded-xl border-solid text-center">
                 {{memos.length}}件
@@ -55,9 +55,9 @@ function formatDate(datetime: string): string {
     </div>
     <div v-for="memo in memos" :key="memo.id"
          class="w-2/5 border-solid rounded-md bg-white border-2 border-orange-200 m-2 p-4 shadow-md">
-        <div class="flex justify-between">
-            <div class="text-lg font-medium mb-2">{{ memo.text }}</div>
-            <button class="w-8 h-8 mt-1 rounded-md text-gray-500 transition hover:text-red-400 hover:bg-red-100"
+        <div class="flex justify-between items-center">
+            <div class="text-lg font-medium">{{ memo.text }}</div>
+            <button class="w-8 h-8 rounded-md text-gray-500 transition hover:text-red-400 hover:bg-red-100"
                     @click="deleteMemo(memo.id)">
                 <Trash class="ml-2"/>
             </button>
