@@ -7,14 +7,20 @@ use Illuminate\Http\Request;
 
 class MemoController extends Controller
 {
-    function store(Request $request){
+    public function store(Request $request){
         Memo::create([
             'text' => $request['text'],
         ]);
     }
 
-    function index(){
+    public function index(){
         $memos = Memo::all();
         return response()->json($memos);
+    }
+
+    public function destroy($id){
+        $memo = Memo::find($id);
+        $memo->delete();
+        return response()->json($memo);
     }
 }
